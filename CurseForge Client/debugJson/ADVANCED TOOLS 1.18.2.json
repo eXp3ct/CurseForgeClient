@@ -1,0 +1,88 @@
+{
+  "data": {
+    "id": 4260213,
+    "gameId": 432,
+    "modId": 775946,
+    "isAvailable": true,
+    "displayName": "ADVANCED TOOLS 1.18.2",
+    "fileName": "ADVANCED_TOOLS-1.18.2.jar",
+    "releaseType": 1,
+    "fileStatus": 4,
+    "hashes": [
+      {
+        "value": "3515ffb0fb8340c704134285dcbb70ce353791d8",
+        "algo": 1
+      },
+      {
+        "value": "8f2d87e56e2a65a99d6ccfa3291e8bae",
+        "algo": 2
+      }
+    ],
+    "fileDate": "2022-12-25T11:16:23.523Z",
+    "fileLength": 163945,
+    "downloadCount": 19,
+    "downloadUrl": null,
+    "gameVersions": [
+      "Fabric",
+      "Client",
+      "1.18.2"
+    ],
+    "sortableGameVersions": [
+      {
+        "gameVersionName": "Fabric",
+        "gameVersionPadded": "0",
+        "gameVersion": "",
+        "gameVersionReleaseDate": "2019-08-01T00:00:00Z",
+        "gameVersionTypeId": 68441
+      },
+      {
+        "gameVersionName": "Client",
+        "gameVersionPadded": "0",
+        "gameVersion": "",
+        "gameVersionReleaseDate": "2022-12-08T00:00:00Z",
+        "gameVersionTypeId": 75208
+      },
+      {
+        "gameVersionName": "1.18.2",
+        "gameVersionPadded": "0000000001.0000000018.0000000002",
+        "gameVersion": "1.18.2",
+        "gameVersionReleaseDate": "2022-02-28T14:23:37.723Z",
+        "gameVersionTypeId": 73250
+      }
+    ],
+    "dependencies": [],
+    "alternateFileId": 0,
+    "isServerPack": false,
+    "fileFingerprint": 176237873,
+    "modules": [
+      {
+        "name": "META-INF",
+        "fingerprint": 2698149954
+      },
+      {
+        "name": "fabric.mod.json",
+        "fingerprint": 2320621899
+      },
+      {
+        "name": "data",
+        "fingerprint": 1083876215
+      },
+      {
+        "name": "assets",
+        "fingerprint": 4047908285
+      },
+      {
+        "name": "advancedtools.mixins.json",
+        "fingerprint": 2611165036
+      },
+      {
+        "name": "ADVANCED_TOOLS-refmap.json",
+        "fingerprint": 2788327150
+      },
+      {
+        "name": "net",
+        "fingerprint": 1440003913
+      }
+    ]
+  }
+}
