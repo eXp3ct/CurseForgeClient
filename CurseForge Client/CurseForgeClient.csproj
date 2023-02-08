@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="debugJson\" />
-    <Folder Include="Model\" />
   </ItemGroup>
 
 </Project>

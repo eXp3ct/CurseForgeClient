@@ -17,7 +17,7 @@ namespace CurseForgeClient.ApiClient
         }
 
 
-        public async Task<Mod> GetMod(string modId = "")
+        public async Task<Mod> GetMod(int modId = 0)
         {
             var json = await _client.GetModAsync(modId);
             var result = JsonConvert.DeserializeObject<ModData>(json);
@@ -38,12 +38,20 @@ namespace CurseForgeClient.ApiClient
             var modsList = new List<Mod>(mods.Data.Count);
 
             foreach(var mod in mods.Data)
+            {
                 modsList.Add(mod);
+                
+            }
 
             return modsList;
         }
 
-       
+        public async Task<Image> DownloadImage(string url)
+        {
+            var imageBytes = await _client.FetchImage(url);
+
+            return Image.FromStream(new MemoryStream(imageBytes));
+        }
     }
     
 }

@@ -3,12 +3,18 @@ namespace CurseForgeClient.Model;
 public struct Mod
 {
     public int Id { get; set; }
-    public string GameId { get; set; }
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
     public ModLogo Logo { get; set; }
-    //public LatestFilesIndex LatestFilesIndexes { get; set; }
+    public List<ModFile> LatestFiles { get; set; }
+    public ModLinks Links { get; set; }
+    
+
+    public override string ToString()
+    {
+        return $"Id: {Id} | Name: {Name} | Slug: {Slug}";
+    }
 }
 public struct ModData
 {
@@ -34,4 +40,9 @@ public struct FileIndex
 public struct LatestFilesIndex
 {
     public List<FileIndex> LatestFilesIndexes { get; set; }
+}
+public struct ModLinks
+{
+    public string WebSiteUrl { get; set; }
+    public string WikiUrl { get; set; }
 }

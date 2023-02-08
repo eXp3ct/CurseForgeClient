@@ -31,7 +31,6 @@ namespace CurseForgeClient.Tests
         [Fact]
         public async Task GetMods_NotNull()
         {
-            var expectedNumberOfMods = 50;
             var gameVersion = "1.12.2";
             var slug = "";
             var index = 0;
@@ -46,7 +45,6 @@ namespace CurseForgeClient.Tests
         [Fact]
         public async Task GetMods_NotEmpty()
         {
-            var expectedNumberOfMods = 50;
             var gameVersion = "1.12.2";
             var slug = "";
             var index = 0;
@@ -62,18 +60,19 @@ namespace CurseForgeClient.Tests
         [Fact]
         public async Task GetMod_NotNull()
         {
-            var modId1 = "810803";
-            var modId2 = "238222";
-            var modId3 = "242638";
+            var modId1 = 810803;
+            var modId2 = 238222;
+            var modId3 = 242638;
             var controller = new ModController(new CurseClientContext());
 
             var result1 = await controller.GetMod(modId1);
             var result2 = await controller.GetMod(modId2);
             var result3 = await controller.GetMod(modId3);
 
-            Assert.NotNull(result1);
-            Assert.NotNull(result2);
-            Assert.NotNull(result3);
+            Assert.True(result1.Id == modId1);
+            Assert.True(result2.Id == modId2);
+            Assert.True(result3.Id == modId3);
         }
+        
     }
 }

@@ -22,7 +22,7 @@ namespace CurseForgeClient.ApiClient
         {
 
         }
-        public async Task<string> GetModAsync(string modId)
+        public async Task<string> GetModAsync(int modId)
         {
             using var client = new HttpClient();
             client.AddHeaders(Headers);
@@ -63,7 +63,7 @@ namespace CurseForgeClient.ApiClient
             return await response.Content.ReadAsStringAsync();
 
         }
-        public async Task<string> GetModFileAsync(string modId, string fileId)
+        public async Task<string> GetModFileAsync(int modId, int fileId)
         {
             using var client = new HttpClient();
             client.AddHeaders(Headers);
@@ -72,6 +72,16 @@ namespace CurseForgeClient.ApiClient
             using var response = await client.GetAsync(queryString);
 
             return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<byte[]> FetchImage(string url)
+        {
+            byte[] image;
+
+            using var client = new HttpClient();
+            image = await client.GetByteArrayAsync(url);
+
+            return image;
         }
     }
 }

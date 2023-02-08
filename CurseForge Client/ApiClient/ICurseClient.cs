@@ -10,14 +10,14 @@ namespace CurseForgeClient.ApiClient
     public interface ICurseClient
     {
         private const string JsonFolder = @"D:\\Projects\\C# Projects\\CurseForge Client\\CurseForge Client\\debugJson";
-        public Task<string> GetModAsync(string modId);
+        public Task<string> GetModAsync(int modId);
         public Task<string> SearchModAsync(
             string gameVersion = "",
             string slug = "",
             int index = 0,
             SortField sortField = SortField.Name,
             string sortOrder = "asc");
-        public Task<string> GetModFileAsync(string modId, string fileId);
+        public Task<string> GetModFileAsync(int modId, int fileId);
         public static bool ConnectionStatus(HttpResponseMessage response) => response.IsSuccessStatusCode;
         public static async Task ResponseToJson(HttpResponseMessage response, bool search = false, bool getFile = false)
         {
@@ -34,7 +34,7 @@ namespace CurseForgeClient.ApiClient
             string path = Path.Combine(JsonFolder, fileName);
             File.WriteAllText(path, JsonConvert.SerializeObject(result, Formatting.Indented));
         }
-        private static async Task DownloadFileAsync(string url)
+        public static async Task DownloadFileAsync(string url)
         {
             using var client = new HttpClient();
             using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
@@ -45,5 +45,7 @@ namespace CurseForgeClient.ApiClient
 
             ConnectionStatus(response);
         }
+        public Task<byte[]> FetchImage(string url);
+
     }
 }
