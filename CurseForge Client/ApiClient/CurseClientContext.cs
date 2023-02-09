@@ -35,7 +35,8 @@ namespace CurseForgeClient.ApiClient
             string slug = "",
             int index = 0,
             SortField sortField = SortField.Name,
-            string sortOrder = "asc")
+            string sortOrder = "asc",
+            int pageSize = 10)
         {
             using var client = new HttpClient();
             client.AddHeaders(Headers);
@@ -53,9 +54,10 @@ namespace CurseForgeClient.ApiClient
                 { "index", index.ToString() },
                 { "sortField", sortField.ToString() },
                 { "sortOrder", sortOrder },
-                { "pageSize", "50" },
+                { "pageSize", pageSize.ToString() },
             };
             var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+            //var queryString = $"gameId={432}&classId={6}&index={0}&pageSize={500}";
             request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
 
             var response = await client.SendAsync(request);

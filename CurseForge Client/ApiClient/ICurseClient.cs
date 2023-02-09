@@ -16,7 +16,8 @@ namespace CurseForgeClient.ApiClient
             string slug = "",
             int index = 0,
             SortField sortField = SortField.Name,
-            string sortOrder = "asc");
+            string sortOrder = "asc",
+            int pageSize = 10);
         public Task<string> GetModFileAsync(int modId, int fileId);
         public static bool ConnectionStatus(HttpResponseMessage response) => response.IsSuccessStatusCode;
         public static async Task ResponseToJson(HttpResponseMessage response, bool search = false, bool getFile = false)

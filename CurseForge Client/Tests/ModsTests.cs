@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Xunit;
 namespace CurseForgeClient.Tests
 {
@@ -73,6 +75,21 @@ namespace CurseForgeClient.Tests
             Assert.True(result2.Id == modId2);
             Assert.True(result3.Id == modId3);
         }
-        
+        [Fact]
+        public async Task GetMods_SuccessResponse()
+        {
+            string gameVersion = "";
+            string slug = "";
+            int index = 0;
+            SortField sortField = SortField.Name;
+            string sortOrder = "asc";
+            var _client = new CurseClientContext();
+
+
+            var jsonString = await _client.SearchModAsync(gameVersion: gameVersion, slug: slug,
+                index: index, sortField: sortField, sortOrder: sortOrder);
+
+            Assert.NotNull(jsonString);
+        }
     }
 }

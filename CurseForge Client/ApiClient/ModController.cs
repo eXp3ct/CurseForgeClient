@@ -1,4 +1,5 @@
-﻿using CurseForgeClient.Model;
+﻿using CurseForgeClient.Extensions;
+using CurseForgeClient.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -30,18 +31,15 @@ namespace CurseForgeClient.ApiClient
             string slug = "",
             int index = 0,
             SortField sortField = SortField.Name,
-            string sortOrder = "asc")
+            string sortOrder = "asc", int pageSize = 10)
         {
             var jsonString = await _client.SearchModAsync(gameVersion: gameVersion, slug: slug,
-                index: index, sortField: sortField, sortOrder: sortOrder);
+                index: index, sortField: sortField, sortOrder: sortOrder, pageSize: pageSize);
             var mods = JsonConvert.DeserializeObject<ModsData>(jsonString);
             var modsList = new List<Mod>(mods.Data.Count);
 
             foreach(var mod in mods.Data)
-            {
                 modsList.Add(mod);
-                
-            }
 
             return modsList;
         }

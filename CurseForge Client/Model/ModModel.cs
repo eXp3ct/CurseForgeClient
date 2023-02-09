@@ -1,6 +1,6 @@
 namespace CurseForgeClient.Model;
 
-public struct Mod
+public class Mod
 {
     public int Id { get; set; }
     public ModLogo Logo { get; set; }
@@ -8,20 +8,20 @@ public struct Mod
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
-    public List<ModFile> LatestFiles { get; set; }    
+    public List<ModFile> LatestFiles { get; set; }
 
     public override string ToString()
     {
         return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url}";
     }
 }
-public struct ModData
+public class ModData
 {
     public Mod Data { get; set; }
 }
-public struct ModsData
+public class ModsData
 {
-    public List<Mod> Data { get; set; }
+    public List<Mod>? Data { get; set; }
 }
 public struct ModLogo
 {

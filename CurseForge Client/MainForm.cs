@@ -8,7 +8,7 @@ namespace CurseForgeClient
 {
     public partial class MainForm : Form
     {
-        private const int PageSize = 50;
+        private const int PageSize = 10;
         private const string SortOrder = "asc";
         private int _page = 0;
         private string GameVersion = string.Empty;
@@ -18,42 +18,14 @@ namespace CurseForgeClient
         {
             InitializeComponent();
         }
-        private void MainForm_Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-            Init();        
-            
-
+            await Init();        
         }
-        private async void Init()
+        private async Task Init()
         {
             _controller = new ModController(new CurseClientContext());
-            _currentMods = await _controller.GetMods(sortOrder: SortOrder);
-            
-            /*foreach(var mod in _currentMods)
-            {
-                var image = await _controller.DownloadImage(mod.Logo.Url);
-                mod.ModLogo = image;
-            }*/
-            //foreach(var mod in _currentMods)
-            //    MessageBox.Show($"{mod.Logo.Url}");
-            //_currentMods.ForEach(async mod => mod.ModLogo = await _controller.DownloadImage(mod.Logo.Url));
-
-            //TODO оптимизировать
-            for (int i = 0; i < _currentMods.Count; i++)
-            {
-                Mod mod = _currentMods[i];
-                mod.LatestFiles = _currentMods[i].LatestFiles;
-                mod.Logo = _currentMods[i].Logo;
-                mod.Id = _currentMods[i].Id;
-                mod.Summary = _currentMods[i].Summary;
-                mod.Slug = _currentMods[i].Slug;
-
-                mod.ModLogo = await _controller.DownloadImage(mod.Logo.Url);
-
-                mod.ModLogo = mod.ModLogo.Resize(new Size(32,32));
-
-                _currentMods[i] = mod;
-            }
+            _currentMods = await _controller.GetMods(sortOrder: SortOrder, pageSize: PageSize);
 
             _bindingSource.DataSource = _currentMods;
             _dataGridView.DataSource = _bindingSource;
@@ -63,7 +35,26 @@ namespace CurseForgeClient
             _dataGridView.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["ModLogo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["Logo"].Visible = false;
-                
+            var task = new Task(async () =>
+            {
+                for (int i = 0; i < _currentMods.Count; i++)
+                {
+                    Mod mod = _currentMods[i];
+                    mod.ModLogo = await _controller.DownloadImage(mod.Logo.Url);
+
+                    mod.ModLogo = mod.ModLogo.Resize(new Size(32, 32));
+
+                    _currentMods[i] = mod;
+                }
+            });
+            task.Start();
+            if (task.IsCompleted)
+            {
+                /*_bindingSource.DataSource = _currentMods;
+                _dataGridView.DataSource = _bindingSource;*/
+                _dataGridView.Refresh();
+            }
+
         }
         private void _dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -84,42 +75,62 @@ namespace CurseForgeClient
 
 
         //TODO Пределать
-        private void nextStripButton_Click(object sender, EventArgs e)
+        private async void nextStripButton_Click(object sender, EventArgs e)
         {
+            if (_page + 1 + PageSize > 10000)
+                return;
             _page++;
-            SetTable();
+            await SetTable();
             _pageStripLabel.Text = _page.ToString();
         }
 
-        private void backStripButton_Click(object sender, EventArgs e)
+        private async void backStripButton_Click(object sender, EventArgs e)
         {
             _page--;
             if(_page <= 1)
             {
                 _page = 0;
-                SetTable();
+                await SetTable();
                 _pageStripLabel.Text = _page.ToString();
                 return;
             }
-            SetTable();
+            await SetTable();
             _pageStripLabel.Text = _page.ToString();
         }
 
-        private void gameVersionStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private async void gameVersionStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             GameVersion = (string)gameVersionStripComboBox.SelectedItem;
-            SetTable();
+            await SetTable();
         }
-        private async void SetTable(
+        private async Task SetTable(
             string slug = "",
             SortField sortField = SortField.Name,
             string sortOrder = SortOrder)
         {
-            _currentMods = await _controller.GetMods(gameVersion: GameVersion, slug: slug,
-                sortField: sortField, sortOrder: sortOrder, index: _page * PageSize);
-            _bindingSource.DataSource = _currentMods;
 
+            _currentMods = await _controller.GetMods(gameVersion: GameVersion, slug: slug,
+                    sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize);
+            _bindingSource.DataSource = _currentMods;
             _dataGridView.DataSource = _bindingSource;
+
+            var task = new Task(async () =>
+            {
+                for (int i = 0; i < _currentMods.Count; i++)
+                {
+                    Mod mod = _currentMods[i];
+                    mod.ModLogo = await _controller.DownloadImage(mod.Logo.Url);
+
+                    mod.ModLogo = mod.ModLogo.Resize(new Size(32, 32));
+
+                    _currentMods[i] = mod;
+                }
+            });
+            task.Start();
+            if (task.IsCompleted)
+            {
+                _dataGridView.Refresh();
+            }
         }
 
         private async void _dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -130,6 +141,11 @@ namespace CurseForgeClient
                 e.Value = await _controller.DownloadImage(mod.Logo.Url);
                 e.FormattingApplied = true;
             }*/
+        }
+
+        private void _dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            _dataGridView.Refresh();
         }
     }
 
