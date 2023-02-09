@@ -40,10 +40,13 @@
             this.nextStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.gameVersionStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).BeginInit();
             this._menuStrip.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // _dataGridView
@@ -53,16 +56,15 @@
             this._dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            this._dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this._dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this._dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this._dataGridView.Location = new System.Drawing.Point(0, 52);
             this._dataGridView.MultiSelect = false;
             this._dataGridView.Name = "_dataGridView";
             this._dataGridView.ReadOnly = true;
-            this._dataGridView.RowHeadersVisible = false;
             this._dataGridView.RowTemplate.Height = 25;
-            this._dataGridView.Size = new System.Drawing.Size(800, 398);
+            this._dataGridView.Size = new System.Drawing.Size(981, 670);
             this._dataGridView.TabIndex = 1;
             this._dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellDoubleClick);
             this._dataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this._dataGridView_CellFormatting);
@@ -73,7 +75,7 @@
             this.файлToolStripMenuItem});
             this._menuStrip.Location = new System.Drawing.Point(0, 0);
             this._menuStrip.Name = "_menuStrip";
-            this._menuStrip.Size = new System.Drawing.Size(800, 24);
+            this._menuStrip.Size = new System.Drawing.Size(1201, 24);
             this._menuStrip.TabIndex = 2;
             this._menuStrip.Text = "menuStrip1";
             // 
@@ -94,7 +96,7 @@
             this.gameVersionStripComboBox});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1201, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -142,17 +144,36 @@
             this.gameVersionStripComboBox.Size = new System.Drawing.Size(121, 25);
             this.gameVersionStripComboBox.SelectedIndexChanged += new System.EventHandler(this.gameVersionStripComboBox_SelectedIndexChanged);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(987, 52);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 670);
+            this.flowLayoutPanel1.TabIndex = 4;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(3, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(197, 334);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1201, 722);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this._dataGridView);
             this.Controls.Add(this._menuStrip);
             this.MainMenuStrip = this._menuStrip;
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "Minecraft ModLoader";
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).EndInit();
@@ -160,6 +181,7 @@
             this._menuStrip.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,5 +199,7 @@
         private ToolStripButton nextStripButton;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripComboBox gameVersionStripComboBox;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Button button1;
     }
 }

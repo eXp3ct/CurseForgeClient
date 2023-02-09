@@ -3,17 +3,16 @@ namespace CurseForgeClient.Model;
 public struct Mod
 {
     public int Id { get; set; }
+    public ModLogo Logo { get; set; }
+    public Image ModLogo { get; set; }
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
-    public ModLogo Logo { get; set; }
-    public List<ModFile> LatestFiles { get; set; }
-    public ModLinks Links { get; set; }
-    
+    public List<ModFile> LatestFiles { get; set; }    
 
     public override string ToString()
     {
-        return $"Id: {Id} | Name: {Name} | Slug: {Slug}";
+        return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url}";
     }
 }
 public struct ModData

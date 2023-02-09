@@ -79,9 +79,18 @@ namespace CurseForgeClient.ApiClient
             byte[] image;
 
             using var client = new HttpClient();
-            image = await client.GetByteArrayAsync(url);
+            try
+            {
+                image = await client.GetByteArrayAsync(url);
+                return image;
+            }
+            catch (Exception ex)
+            {
 
-            return image;
+                MessageBox.Show($"{url}");
+            }
+
+            return new byte[] { };
         }
     }
 }
