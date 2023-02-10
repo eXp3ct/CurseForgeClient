@@ -8,12 +8,12 @@ namespace CurseForgeClient
 {
     public partial class MainForm : Form
     {
-        private const int PageSize = 10;
+        private const int PageSize = 28;
         private const string SortOrder = "asc";
         private int _page = 0;
         private string GameVersion = string.Empty;
-        private ModController _controller;
-        private List<Mod> _currentMods;
+        private static ModController _controller;
+        private static List<Mod> _currentMods;
         public MainForm()
         {
             InitializeComponent();
@@ -35,6 +35,33 @@ namespace CurseForgeClient
             _dataGridView.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["ModLogo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["Logo"].Visible = false;
+
+            var selectionColumn = new DataGridViewCheckBoxColumn
+            {
+                Name = "Selection",
+                HeaderText = "Select",
+                DisplayIndex = 6,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
+            };
+            _dataGridView.Columns.Insert(0, selectionColumn);
+
+            for (int i = 0; i < _dataGridView.Columns.Count; i++)
+            {
+                if (_dataGridView.Columns[i].Name == "Selection")
+                {
+                    _dataGridView.Columns[i].ReadOnly = false;
+                }
+                else
+                {
+                    _dataGridView.Columns[i].ReadOnly = true;
+                }
+            }
+
+            FetchImages();
+        }
+
+        private void FetchImages()
+        {
             var task = new Task(async () =>
             {
                 for (int i = 0; i < _currentMods.Count; i++)
@@ -46,16 +73,18 @@ namespace CurseForgeClient
 
                     _currentMods[i] = mod;
                 }
-            });
-            task.Start();
-            if (task.IsCompleted)
-            {
-                /*_bindingSource.DataSource = _currentMods;
-                _dataGridView.DataSource = _bindingSource;*/
-                _dataGridView.Refresh();
-            }
 
+                _dataGridView.Invoke((MethodInvoker)delegate
+                {
+                    _dataGridView.Refresh();
+                    _dataGridView.Invalidate();
+                    _dataGridView.InvalidateColumn(_dataGridView.Columns["ModLogo"].Index);
+                });
+            });
+
+            task.Start();
         }
+
         private void _dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -114,23 +143,7 @@ namespace CurseForgeClient
             _bindingSource.DataSource = _currentMods;
             _dataGridView.DataSource = _bindingSource;
 
-            var task = new Task(async () =>
-            {
-                for (int i = 0; i < _currentMods.Count; i++)
-                {
-                    Mod mod = _currentMods[i];
-                    mod.ModLogo = await _controller.DownloadImage(mod.Logo.Url);
-
-                    mod.ModLogo = mod.ModLogo.Resize(new Size(32, 32));
-
-                    _currentMods[i] = mod;
-                }
-            });
-            task.Start();
-            if (task.IsCompleted)
-            {
-                _dataGridView.Refresh();
-            }
+            FetchImages();
         }
 
         private async void _dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

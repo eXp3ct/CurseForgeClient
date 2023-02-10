@@ -4,11 +4,12 @@ public class Mod
 {
     public int Id { get; set; }
     public ModLogo Logo { get; set; }
-    public Image ModLogo { get; set; }
+    public Image? ModLogo { get; set; } = null;
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
     public List<ModFile> LatestFiles { get; set; }
+    //public bool Selected { get; set; }
 
     public override string ToString()
     {

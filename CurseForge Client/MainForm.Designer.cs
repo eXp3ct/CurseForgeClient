@@ -63,7 +63,6 @@
             this._dataGridView.Location = new System.Drawing.Point(0, 52);
             this._dataGridView.MultiSelect = false;
             this._dataGridView.Name = "_dataGridView";
-            this._dataGridView.ReadOnly = true;
             this._dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this._dataGridView.RowTemplate.Height = 34;
             this._dataGridView.Size = new System.Drawing.Size(981, 670);
