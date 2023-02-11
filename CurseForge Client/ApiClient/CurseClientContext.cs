@@ -1,5 +1,8 @@
 ﻿using CurseForgeClient.Extensions;
 using Newtonsoft.Json;
+using System.Drawing.Printing;
+using System.Windows.Forms;
+using System;
 
 namespace CurseForgeClient.ApiClient
 {
@@ -93,6 +96,33 @@ namespace CurseForgeClient.ApiClient
             }
 
             return new byte[] { };
+        }
+
+        public async Task<string> GetModFiles(int modId, string gameVersion = "", ModLoaderType modLoaderType = ModLoaderType.Forge, int index = 0,
+            int pageSize = 50)
+        {
+            //v1/mods/{modId}/files
+            using var client = new HttpClient();
+            client.AddHeaders(Headers);
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/v1/mods/{modId}/files");
+            foreach (var header in Headers)
+                request.Headers.Add(header.Key, header.Value);
+
+            var queryParams = new Dictionary<string, string>
+            {
+                { "gameVersion", gameVersion },
+                { "modLoaderType", ((int)modLoaderType).ToString()},
+                { "index", index.ToString()},
+                { "pageSize", pageSize.ToString()},
+            };
+            var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+            //var queryString = $"gameId={432}&classId={6}&index={0}&pageSize={500}";
+            request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
+
+            var response = await client.SendAsync(request);
+
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

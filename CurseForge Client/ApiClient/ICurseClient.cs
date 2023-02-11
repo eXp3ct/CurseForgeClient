@@ -35,17 +35,8 @@ namespace CurseForgeClient.ApiClient
             string path = Path.Combine(JsonFolder, fileName);
             File.WriteAllText(path, JsonConvert.SerializeObject(result, Formatting.Indented));
         }
-        public static async Task DownloadFileAsync(string url)
-        {
-            using var client = new HttpClient();
-            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-            using var fileStream = new FileStream(@"D:\Projects\C# Projects\CurseForge Client\CurseForge Client\Jars\mod.jar",
-                FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true);
-
-            await response.Content.CopyToAsync(fileStream);
-
-            ConnectionStatus(response);
-        }
+        public Task<string> GetModFiles(int modId, string gameVersion = "", ModLoaderType modLoaderType = ModLoaderType.Forge, int index = 0,
+            int pageSize = 50);
         public Task<byte[]> FetchImage(string url);
 
     }

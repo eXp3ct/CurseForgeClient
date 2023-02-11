@@ -8,12 +8,10 @@ public class Mod
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
-    public List<ModFile> LatestFiles { get; set; }
-    //public bool Selected { get; set; }
 
     public override string ToString()
     {
-        return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url} | LatestFiles {LatestFiles.Count}";
+        return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url}";
     }
 }
 public class ModData

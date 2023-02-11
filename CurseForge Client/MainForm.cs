@@ -2,6 +2,7 @@ using CurseForgeClient.ApiClient;
 using CurseForgeClient.Model;
 using CurseForgeClient.Extensions;
 using System.Runtime.Caching;
+using CurseForgeClient.Downloader;
 
 namespace CurseForgeClient
 {
@@ -22,6 +23,7 @@ namespace CurseForgeClient
             { "По возрастанию", "asc" },
             { "По убыванию", "desc" },
         };
+        private string DirectoryPath = string.Empty;
         private const int PageSize = 28;
         private string SortOrder = "asc";
         private SortField SortFieldName = SortField.Name;
@@ -224,8 +226,31 @@ namespace CurseForgeClient
             SortOrder = _sortOrder[selectedOrder];
             await SetTable(sortOrder: SortOrder);
         }
-    }
 
+        private void выбратьПапкуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                DirectoryPath = folderBrowserDialog.SelectedPath;
+            }
+        }
+
+        private async void installModsButton_Click(object sender, EventArgs e)
+        {
+            List<Mod> selectedMods = new List<Mod>();
+
+            foreach (DataGridViewRow row in _dataGridView.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["Selection"].Value))
+                {
+                    selectedMods.Add((Mod)row.DataBoundItem);
+                }
+            }
+
+            var downloader = new ModDownloader(DirectoryPath);
+            downloader.StartDownloading(selectedMods, gameVersion: GameVersion);
+        }
+    }
 }
 
 /*

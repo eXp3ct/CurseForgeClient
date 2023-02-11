@@ -50,6 +50,22 @@ namespace CurseForgeClient.ApiClient
 
             return Image.FromStream(new MemoryStream(imageBytes));
         }
+
+        public async Task<List<ModFile>> GetModFiles(int modId, string gameVersion = "", ModLoaderType modLoaderType = ModLoaderType.Forge, int index = 0,
+            int pageSize = 50)
+        {
+            var jsonString = await _client.GetModFiles(modId: modId, gameVersion: gameVersion, 
+                modLoaderType: modLoaderType, index: index, pageSize: pageSize);
+
+            var modFiles = JsonConvert.DeserializeObject<ModFiles>(jsonString);
+            var filesList = new List<ModFile>(modFiles.Data.Count);
+
+            foreach(var file in modFiles.Data)
+                filesList.Add(file);
+
+            return filesList;
+
+        }
     }
     
 }

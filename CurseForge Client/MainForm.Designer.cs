@@ -34,6 +34,7 @@
             this._bindingSource = new System.Windows.Forms.BindingSource(this.components);
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выбратьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.backStripButton = new System.Windows.Forms.ToolStripButton();
             this._pageStripLabel = new System.Windows.Forms.ToolStripLabel();
@@ -48,7 +49,8 @@
             this.sortOrderTextStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.sortOrderStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.installModsButton = new System.Windows.Forms.Button();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).BeginInit();
             this._menuStrip.SuspendLayout();
@@ -88,9 +90,18 @@
             // 
             // файлToolStripMenuItem
             // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.выбратьПапкуToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // выбратьПапкуToolStripMenuItem
+            // 
+            this.выбратьПапкуToolStripMenuItem.Name = "выбратьПапкуToolStripMenuItem";
+            this.выбратьПапкуToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.выбратьПапкуToolStripMenuItem.Text = "Выбрать папку";
+            this.выбратьПапкуToolStripMenuItem.Click += new System.EventHandler(this.выбратьПапкуToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -197,20 +208,23 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Controls.Add(this.installModsButton);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(987, 52);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 670);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
-            // button1
+            // installModsButton
             // 
-            this.button1.Location = new System.Drawing.Point(3, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(197, 334);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.installModsButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.installModsButton.Location = new System.Drawing.Point(3, 3);
+            this.installModsButton.Name = "installModsButton";
+            this.installModsButton.Size = new System.Drawing.Size(197, 76);
+            this.installModsButton.TabIndex = 0;
+            this.installModsButton.Text = "Установить";
+            this.installModsButton.UseVisualStyleBackColor = true;
+            this.installModsButton.Click += new System.EventHandler(this.installModsButton_Click);
             // 
             // MainForm
             // 
@@ -250,7 +264,7 @@
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripComboBox gameVersionStripComboBox;
         private FlowLayoutPanel flowLayoutPanel1;
-        private Button button1;
+        private Button installModsButton;
         private ToolStripLabel gameVersionTextStripLabel;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripLabel sortFieldStripLabel;
@@ -258,5 +272,7 @@
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripLabel sortOrderTextStripLabel;
         private ToolStripComboBox sortOrderStripComboBox;
+        private ToolStripMenuItem выбратьПапкуToolStripMenuItem;
+        private FolderBrowserDialog folderBrowserDialog;
     }
 }
