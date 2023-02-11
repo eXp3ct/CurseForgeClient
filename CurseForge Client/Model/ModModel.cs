@@ -13,7 +13,7 @@ public class Mod
 
     public override string ToString()
     {
-        return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url}";
+        return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url} | LatestFiles {LatestFiles.Count}";
     }
 }
 public class ModData

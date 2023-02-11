@@ -39,7 +39,14 @@
             this._pageStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.nextStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.gameVersionTextStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.gameVersionStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.sortFieldStripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.sortFieldStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.sortOrderTextStripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.sortOrderStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
@@ -68,8 +75,6 @@
             this._dataGridView.Size = new System.Drawing.Size(981, 670);
             this._dataGridView.TabIndex = 1;
             this._dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellDoubleClick);
-            this._dataGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this._dataGridView_CellFormatting);
-            this._dataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellValueChanged);
             // 
             // _menuStrip
             // 
@@ -95,7 +100,14 @@
             this._pageStripLabel,
             this.nextStripButton,
             this.toolStripSeparator1,
-            this.gameVersionStripComboBox});
+            this.gameVersionTextStripLabel,
+            this.gameVersionStripComboBox,
+            this.toolStripSeparator2,
+            this.sortFieldStripLabel,
+            this.sortFieldStripComboBox,
+            this.toolStripSeparator3,
+            this.sortOrderTextStripLabel,
+            this.sortOrderStripComboBox});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1201, 25);
@@ -134,17 +146,53 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
+            // gameVersionTextStripLabel
+            // 
+            this.gameVersionTextStripLabel.Name = "gameVersionTextStripLabel";
+            this.gameVersionTextStripLabel.Size = new System.Drawing.Size(77, 22);
+            this.gameVersionTextStripLabel.Text = "Версия игры";
+            // 
             // gameVersionStripComboBox
             // 
             this.gameVersionStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.gameVersionStripComboBox.Items.AddRange(new object[] {
-            "1.7.10",
-            "1.12.2",
-            "1.16.5",
-            "1.19.2"});
             this.gameVersionStripComboBox.Name = "gameVersionStripComboBox";
             this.gameVersionStripComboBox.Size = new System.Drawing.Size(121, 25);
             this.gameVersionStripComboBox.SelectedIndexChanged += new System.EventHandler(this.gameVersionStripComboBox_SelectedIndexChanged);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // sortFieldStripLabel
+            // 
+            this.sortFieldStripLabel.Name = "sortFieldStripLabel";
+            this.sortFieldStripLabel.Size = new System.Drawing.Size(95, 22);
+            this.sortFieldStripLabel.Text = "Сортировать по";
+            // 
+            // sortFieldStripComboBox
+            // 
+            this.sortFieldStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sortFieldStripComboBox.Name = "sortFieldStripComboBox";
+            this.sortFieldStripComboBox.Size = new System.Drawing.Size(121, 25);
+            this.sortFieldStripComboBox.SelectedIndexChanged += new System.EventHandler(this.sortFieldStripComboBox_SelectedIndexChanged);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // sortOrderTextStripLabel
+            // 
+            this.sortOrderTextStripLabel.Name = "sortOrderTextStripLabel";
+            this.sortOrderTextStripLabel.Size = new System.Drawing.Size(149, 22);
+            this.sortOrderTextStripLabel.Text = "Направление сортировки";
+            // 
+            // sortOrderStripComboBox
+            // 
+            this.sortOrderStripComboBox.Name = "sortOrderStripComboBox";
+            this.sortOrderStripComboBox.Size = new System.Drawing.Size(121, 25);
+            this.sortOrderStripComboBox.SelectedIndexChanged += new System.EventHandler(this.sortOrderStripComboBox_SelectedIndexChanged);
             // 
             // flowLayoutPanel1
             // 
@@ -203,5 +251,12 @@
         private ToolStripComboBox gameVersionStripComboBox;
         private FlowLayoutPanel flowLayoutPanel1;
         private Button button1;
+        private ToolStripLabel gameVersionTextStripLabel;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripLabel sortFieldStripLabel;
+        private ToolStripComboBox sortFieldStripComboBox;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripLabel sortOrderTextStripLabel;
+        private ToolStripComboBox sortOrderStripComboBox;
     }
 }

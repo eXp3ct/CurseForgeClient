@@ -86,7 +86,7 @@ namespace CurseForgeClient.ApiClient
                 image = await client.GetByteArrayAsync(url);
                 return image;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 MessageBox.Show($"{url}");

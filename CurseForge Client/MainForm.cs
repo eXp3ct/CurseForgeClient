@@ -1,15 +1,30 @@
 using CurseForgeClient.ApiClient;
 using CurseForgeClient.Model;
-using System.Net;
-using System.Windows.Forms;
 using CurseForgeClient.Extensions;
+using System.Runtime.Caching;
 
 namespace CurseForgeClient
 {
     public partial class MainForm : Form
     {
+        private readonly ObjectCache _cache = MemoryCache.Default;
+        private readonly List<string> _gameVersions = new List<string> 
+        {
+            "Все версии",
+            "1.7.10",
+            "1.12.2",
+            "1.15.2",
+            "1.16.5",
+            "1.19.2"
+        };
+        private readonly Dictionary<string, string> _sortOrder = new()
+        {
+            { "По возрастанию", "asc" },
+            { "По убыванию", "desc" },
+        };
         private const int PageSize = 28;
-        private const string SortOrder = "asc";
+        private string SortOrder = "asc";
+        private SortField SortFieldName = SortField.Name;
         private int _page = 0;
         private string GameVersion = string.Empty;
         private static ModController _controller;
@@ -20,13 +35,19 @@ namespace CurseForgeClient
         }
         private async void MainForm_Load(object sender, EventArgs e)
         {
+            foreach(var gameVersion in _gameVersions)
+                gameVersionStripComboBox.Items.Add(gameVersion);
+            foreach (SortField sortField in Enum.GetValues(typeof(SortField)))
+                sortFieldStripComboBox.Items.Add(sortField.ToString());
+            foreach(var sortOrder in _sortOrder.Keys)
+                sortOrderStripComboBox.Items.Add(sortOrder.ToString());
             await Init();        
         }
         private async Task Init()
         {
             _controller = new ModController(new CurseClientContext());
-            _currentMods = await _controller.GetMods(sortOrder: SortOrder, pageSize: PageSize);
-
+            //_currentMods = await _controller.GetMods(sortOrder: SortOrder, pageSize: PageSize);
+            _currentMods = await GetModsFromCacheOrFetch(gameVersion: GameVersion);
             _bindingSource.DataSource = _currentMods;
             _dataGridView.DataSource = _bindingSource;
 
@@ -59,9 +80,36 @@ namespace CurseForgeClient
 
             FetchImages();
         }
+        private async Task<List<Mod>> GetModsFromCacheOrFetch(string slug = "",
+            SortField sortField = SortField.Name,
+            string sortOrder = "asc",
+            string gameVersion = "")
+        {
+            // Create a cache key based on the current game version, page number, slug, sort field, and sort order
+            string cacheKey = "ModsPage_" + gameVersion + "" + slug + "" + sortField + "" + sortOrder + "" + _page;
+
+            // Check if there's a cache entry for the current game version and page
+            if (_cache[cacheKey] is List<Mod> mods)
+            {
+                // If there is a cache entry, return the cached value
+                return mods;
+            }
+
+            // If there's no cache entry for the current game version and page, fetch the data
+            mods = await _controller.GetMods(gameVersion: gameVersion, slug: slug,
+                        sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize);
+
+            // Add the fetched data to the cache with a 1 hour expiration time
+            _cache.Add(cacheKey, mods, DateTime.Now.AddHours(1));
+
+            // Return the fetched data
+            return mods;
+        }
 
         private void FetchImages()
         {
+            if (CheckImages())
+                return;
             var task = new Task(async () =>
             {
                 for (int i = 0; i < _currentMods.Count; i++)
@@ -84,7 +132,15 @@ namespace CurseForgeClient
 
             task.Start();
         }
-
+        private bool CheckImages()
+        {
+            foreach(var mod in _currentMods)
+            {
+                if (mod.ModLogo == null)
+                    return false;
+            }
+            return true;
+        }
         private void _dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 
@@ -116,7 +172,7 @@ namespace CurseForgeClient
         private async void backStripButton_Click(object sender, EventArgs e)
         {
             _page--;
-            if(_page <= 1)
+            if(_page < 1)
             {
                 _page = 0;
                 await SetTable();
@@ -130,35 +186,43 @@ namespace CurseForgeClient
         private async void gameVersionStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             GameVersion = (string)gameVersionStripComboBox.SelectedItem;
+            if (GameVersion == "Все версии")
+                GameVersion = string.Empty;
             await SetTable();
         }
         private async Task SetTable(
             string slug = "",
             SortField sortField = SortField.Name,
-            string sortOrder = SortOrder)
+            string sortOrder = "asc")
         {
 
-            _currentMods = await _controller.GetMods(gameVersion: GameVersion, slug: slug,
-                    sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize);
+            //_currentMods = await _controller.GetMods(gameVersion: GameVersion, slug: slug,
+            //        sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize);
+
+            _currentMods = await GetModsFromCacheOrFetch(slug: slug,
+                    sortField: SortFieldName, sortOrder: SortOrder, gameVersion: GameVersion);
+
             _bindingSource.DataSource = _currentMods;
+            _bindingSource.ResetBindings(false);
             _dataGridView.DataSource = _bindingSource;
 
             FetchImages();
         }
 
-        private async void _dataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private async void sortFieldStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            /*if (_dataGridView.Columns[e.ColumnIndex].Name == "Logo")
+            if(Enum.TryParse(sortFieldStripComboBox.SelectedItem as string, out SortField sortField))
             {
-                var mod = (Mod)_dataGridView.Rows[e.RowIndex].DataBoundItem;
-                e.Value = await _controller.DownloadImage(mod.Logo.Url);
-                e.FormattingApplied = true;
-            }*/
+                SortFieldName = sortField;
+                await SetTable(sortField: SortFieldName, sortOrder: SortOrder);
+            }
         }
 
-        private void _dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private async void sortOrderStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _dataGridView.Refresh();
+            var selectedOrder = sortOrderStripComboBox.SelectedItem.ToString();
+            SortOrder = _sortOrder[selectedOrder];
+            await SetTable(sortOrder: SortOrder);
         }
     }
 
