@@ -77,6 +77,9 @@
             this._dataGridView.Size = new System.Drawing.Size(981, 670);
             this._dataGridView.TabIndex = 1;
             this._dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellDoubleClick);
+            this._dataGridView.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this._dataGridView_CellMouseClick);
+            this._dataGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this._dataGridView_CellValueChanged);
+            this._dataGridView.CurrentCellDirtyStateChanged += new System.EventHandler(this._dataGridView_CurrentCellDirtyStateChanged);
             // 
             // _menuStrip
             // 
@@ -140,7 +143,7 @@
             this._pageStripLabel.Enabled = false;
             this._pageStripLabel.Name = "_pageStripLabel";
             this._pageStripLabel.Size = new System.Drawing.Size(13, 22);
-            this._pageStripLabel.Text = "1";
+            this._pageStripLabel.Text = "0";
             // 
             // nextStripButton
             // 

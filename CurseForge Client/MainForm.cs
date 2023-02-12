@@ -23,6 +23,7 @@ namespace CurseForgeClient
             { "По возрастанию", "asc" },
             { "По убыванию", "desc" },
         };
+        private Dictionary<int, Mod> _selectedMods = new();
         private string DirectoryPath = string.Empty;
         private const int PageSize = 28;
         private string SortOrder = "asc";
@@ -57,14 +58,16 @@ namespace CurseForgeClient
             _dataGridView.Columns["Slug"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["ModLogo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            //_dataGridView.Columns["Selection"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
             _dataGridView.Columns["Logo"].Visible = false;
 
             var selectionColumn = new DataGridViewCheckBoxColumn
             {
                 Name = "Selection",
                 HeaderText = "Select",
-                DisplayIndex = 6,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells,
+                DisplayIndex = 6,
+
             };
             _dataGridView.Columns.Insert(0, selectionColumn);
 
@@ -80,6 +83,7 @@ namespace CurseForgeClient
                 }
             }
 
+
             FetchImages();
         }
         private async Task<List<Mod>> GetModsFromCacheOrFetch(string slug = "",
@@ -89,11 +93,25 @@ namespace CurseForgeClient
         {
             // Create a cache key based on the current game version, page number, slug, sort field, and sort order
             string cacheKey = "ModsPage_" + gameVersion + "" + slug + "" + sortField + "" + sortOrder + "" + _page;
+            string selectedModsCacheKey = "SelectedMods_" + GameVersion + "_" + _page;
 
             // Check if there's a cache entry for the current game version and page
             if (_cache[cacheKey] is List<Mod> mods)
             {
-                // If there is a cache entry, return the cached value
+                //RestoreSelectionState();               
+
+                if (_cache[selectedModsCacheKey] is Dictionary<int, Mod> selectedMods)
+                {
+                    foreach (DataGridViewRow row in _dataGridView.Rows)
+                    {
+                        Mod mod = (Mod)row.DataBoundItem;
+                        if (selectedMods.ContainsKey(mod.Id))
+                        {
+                            row.Cells[_dataGridView.Columns["Selection"].Index].Value = true;
+                        }
+                    }
+                }
+
                 return mods;
             }
 
@@ -107,7 +125,24 @@ namespace CurseForgeClient
             // Return the fetched data
             return mods;
         }
-
+        private void RestoreSelectionState()
+        {
+            string cacheKey = "SelectedMods_" + GameVersion + "_" + _page;
+            if (_cache[cacheKey] is Dictionary<int, Mod> selectedMods)
+            {
+                foreach (DataGridViewRow row in _dataGridView.Rows)
+                {
+                    Mod mod = (Mod)row.DataBoundItem;
+                    if (selectedMods.ContainsKey(mod.Id))
+                    {
+                        row.Cells[_dataGridView.Columns["Selection"].Index].Value = true;
+                    }
+                }
+            }
+            _dataGridView.Refresh();
+            _dataGridView.Invalidate();
+            _dataGridView.InvalidateColumn(_dataGridView.Columns["Selection"].Index);
+        }
         private void FetchImages()
         {
             if (CheckImages())
@@ -208,6 +243,8 @@ namespace CurseForgeClient
             _bindingSource.ResetBindings(false);
             _dataGridView.DataSource = _bindingSource;
 
+            RestoreSelectionState();
+
             FetchImages();
         }
 
@@ -237,18 +274,67 @@ namespace CurseForgeClient
 
         private async void installModsButton_Click(object sender, EventArgs e)
         {
-            List<Mod> selectedMods = new List<Mod>();
-
-            foreach (DataGridViewRow row in _dataGridView.Rows)
+            try
             {
-                if (Convert.ToBoolean(row.Cells["Selection"].Value))
+                if (DirectoryPath == string.Empty)
+                    throw new InvalidDataException("Choose directory path");
+                var downloader = new ModDownloader(DirectoryPath);
+                var mods = (_cache["SelectedMods_" + GameVersion + "_" + _page] as Dictionary<int, Mod>).Values.ToList();
+                if (mods == null)
+                    throw new NullReferenceException("Error occured while downloading mods");
+                await downloader.StartDownloading(mods, gameVersion: GameVersion);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error occured while downloading mods {ex.Message}");
+            }
+        }
+
+        private void _dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (_dataGridView.Columns[e.ColumnIndex].Name == "Selection")
+            {
+                int rowIndex = e.RowIndex;
+                DataGridViewRow row = _dataGridView.Rows[rowIndex];
+                Mod mod = (Mod)row.DataBoundItem;
+
+                bool isSelected = (bool)row.Cells[_dataGridView.Columns["Selection"].Index].Value;
+
+                string cacheKey = "SelectedMods_" + GameVersion + "_" + _page;
+                if (_cache[cacheKey] is Dictionary<int, Mod> selectedMods)
                 {
-                    selectedMods.Add((Mod)row.DataBoundItem);
+                    if (isSelected)
+                    {
+                        selectedMods[mod.Id] = mod;
+                    }
+                    else
+                    {
+                        selectedMods.Remove(mod.Id);
+                    }
+                    _cache[cacheKey] = selectedMods;
+                }
+                else
+                {
+                    Dictionary<int, Mod> newSelectedMods = new Dictionary<int, Mod>();
+                    if (isSelected)
+                    {
+                        newSelectedMods[mod.Id] = mod;
+                    }
+                    _cache[cacheKey] = newSelectedMods;
                 }
             }
+        }
+        private void _dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            
+        }
 
-            var downloader = new ModDownloader(DirectoryPath);
-            downloader.StartDownloading(selectedMods, gameVersion: GameVersion);
+        private void _dataGridView_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (_dataGridView.IsCurrentCellDirty)
+            {
+                _dataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
         }
     }
 }
