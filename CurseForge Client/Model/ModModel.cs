@@ -10,7 +10,7 @@ public class Mod
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
-    //public bool Selection { get; set; }
+
     public override string ToString()
     {
         return $"Id: {Id} | Name: {Name} | Slug: {Slug} | {Logo.Url}";

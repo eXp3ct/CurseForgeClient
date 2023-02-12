@@ -3,6 +3,7 @@ using CurseForgeClient.Model;
 using CurseForgeClient.Extensions;
 using System.Runtime.Caching;
 using CurseForgeClient.Downloader;
+using CurseForgeClient.CustomControl;
 
 namespace CurseForgeClient
 {
@@ -23,7 +24,7 @@ namespace CurseForgeClient
             { "По возрастанию", "asc" },
             { "По убыванию", "desc" },
         };
-        private Dictionary<int, Mod> _selectedMods = new();
+        private int PageHaveSeen { get; set; } = 0;
         private string DirectoryPath = string.Empty;
         private const int PageSize = 28;
         private string SortOrder = "asc";
@@ -202,6 +203,7 @@ namespace CurseForgeClient
             if (_page + 1 + PageSize > 10000)
                 return;
             _page++;
+            PageHaveSeen++;
             await SetTable();
             _pageStripLabel.Text = _page.ToString();
         }
@@ -278,15 +280,40 @@ namespace CurseForgeClient
             {
                 if (DirectoryPath == string.Empty)
                     throw new InvalidDataException("Choose directory path");
+
                 var downloader = new ModDownloader(DirectoryPath);
-                var mods = (_cache["SelectedMods_" + GameVersion + "_" + _page] as Dictionary<int, Mod>).Values.ToList();
+                List<Mod> mods = new();
+
+                for (int i = 0; i <= PageHaveSeen; i++)
+                {
+                    var selectedMods = (_cache["SelectedMods_" + GameVersion + "_" + i] as Dictionary<int, Mod>).Values.ToList();
+                    mods.AddRange(selectedMods);
+                }
+              
                 if (mods == null)
                     throw new NullReferenceException("Error occured while downloading mods");
-                await downloader.StartDownloading(mods, gameVersion: GameVersion);
+
+                downloadingStripProgressBar.Minimum = 0;
+                downloadingStripProgressBar.Maximum = 100;
+                var progress = new ToolStripProgressBarUpdater(downloadingStripProgressBar);
+
+                try
+                {
+                    await downloader.StartDownloading(mods, gameVersion: GameVersion, progress);
+                    MessageBox.Show("Mods successfully installed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error installing mods: " + ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    downloadingStripProgressBar.Value = 0;
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occured while downloading mods {ex.Message}");
+                MessageBox.Show($"Error occured while downloading mods {ex.Message} \n {ex.StackTrace}");
             }
         }
 

@@ -23,6 +23,7 @@ public class ModFile
     public string DisplayName { get; set; }
     public string FileName { get; set; }
     public string DownloadUrl { get; set; }
+    public long FileLength { get; set; }
     public DateTime FileDate { get; set; }
     public List<string> GameVersions { get; set; }
 }

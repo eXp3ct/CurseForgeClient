@@ -51,6 +51,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.installModsButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.downloadingStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).BeginInit();
             this._menuStrip.SuspendLayout();
@@ -121,7 +122,8 @@
             this.sortFieldStripComboBox,
             this.toolStripSeparator3,
             this.sortOrderTextStripLabel,
-            this.sortOrderStripComboBox});
+            this.sortOrderStripComboBox,
+            this.downloadingStripProgressBar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1201, 25);
@@ -229,6 +231,12 @@
             this.installModsButton.UseVisualStyleBackColor = true;
             this.installModsButton.Click += new System.EventHandler(this.installModsButton_Click);
             // 
+            // downloadingStripProgressBar
+            // 
+            this.downloadingStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.downloadingStripProgressBar.Name = "downloadingStripProgressBar";
+            this.downloadingStripProgressBar.Size = new System.Drawing.Size(200, 22);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -277,5 +285,6 @@
         private ToolStripComboBox sortOrderStripComboBox;
         private ToolStripMenuItem выбратьПапкуToolStripMenuItem;
         private FolderBrowserDialog folderBrowserDialog;
+        private ToolStripProgressBar downloadingStripProgressBar;
     }
 }

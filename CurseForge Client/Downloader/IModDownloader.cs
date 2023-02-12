@@ -9,6 +9,6 @@ namespace CurseForgeClient.Downloader
 {
     public interface IModDownloader
     {
-        public Task StartDownloading(List<Mod> mods, string gameVersion);
+        public Task StartDownloading(List<Mod> mods, string gameVersion, IProgress<double> progress);
     }
 }
