@@ -26,4 +26,8 @@
     <Folder Include="debugJson\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Server\Server.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -10,7 +10,7 @@ namespace CurseForgeClient
     public partial class MainForm : Form
     {
         private readonly ObjectCache _cache = MemoryCache.Default;
-        private readonly List<string> _gameVersions = new List<string> 
+        private readonly List<string> _gameVersions = new()
         {
             "Âñå âåðñèè",
             "1.7.10",
@@ -286,10 +286,16 @@ namespace CurseForgeClient
 
                 for (int i = 0; i <= PageHaveSeen; i++)
                 {
-                    var selectedMods = (_cache["SelectedMods_" + GameVersion + "_" + i] as Dictionary<int, Mod>).Values.ToList();
-                    mods.AddRange(selectedMods);
+                    string cacheKey = "SelectedMods_" + GameVersion + "_" + i;
+                    if (_cache.Contains(cacheKey))
+                    {
+                        var selectedMods = (_cache[cacheKey] as Dictionary<int, Mod>).Values.ToList();
+                        mods.AddRange(selectedMods);
+                    }
                 }
-              
+
+
+
                 if (mods == null)
                     throw new NullReferenceException("Error occured while downloading mods");
 
@@ -313,7 +319,7 @@ namespace CurseForgeClient
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occured while downloading mods {ex.Message} \n {ex.StackTrace}");
+                MessageBox.Show($"Error occured while downloading mods {ex.Message} \n{ex.StackTrace}");
             }
         }
 
@@ -362,6 +368,14 @@ namespace CurseForgeClient
             {
                 _dataGridView.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+        private void ïîäåëèòüñÿToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var shareWindow = new ShareWindow(DirectoryPath);
+            shareWindow.Show(this);
+
+
         }
     }
 }

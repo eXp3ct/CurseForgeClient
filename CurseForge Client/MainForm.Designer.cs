@@ -48,10 +48,11 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.sortOrderTextStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.sortOrderStripComboBox = new System.Windows.Forms.ToolStripComboBox();
+            this.downloadingStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.installModsButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.downloadingStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.поделитьсяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).BeginInit();
             this._menuStrip.SuspendLayout();
@@ -85,7 +86,8 @@
             // _menuStrip
             // 
             this._menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem});
+            this.файлToolStripMenuItem,
+            this.поделитьсяToolStripMenuItem});
             this._menuStrip.Location = new System.Drawing.Point(0, 0);
             this._menuStrip.Name = "_menuStrip";
             this._menuStrip.Size = new System.Drawing.Size(1201, 24);
@@ -210,6 +212,12 @@
             this.sortOrderStripComboBox.Size = new System.Drawing.Size(121, 25);
             this.sortOrderStripComboBox.SelectedIndexChanged += new System.EventHandler(this.sortOrderStripComboBox_SelectedIndexChanged);
             // 
+            // downloadingStripProgressBar
+            // 
+            this.downloadingStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.downloadingStripProgressBar.Name = "downloadingStripProgressBar";
+            this.downloadingStripProgressBar.Size = new System.Drawing.Size(200, 22);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -231,11 +239,12 @@
             this.installModsButton.UseVisualStyleBackColor = true;
             this.installModsButton.Click += new System.EventHandler(this.installModsButton_Click);
             // 
-            // downloadingStripProgressBar
+            // поделитьсяToolStripMenuItem
             // 
-            this.downloadingStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.downloadingStripProgressBar.Name = "downloadingStripProgressBar";
-            this.downloadingStripProgressBar.Size = new System.Drawing.Size(200, 22);
+            this.поделитьсяToolStripMenuItem.Name = "поделитьсяToolStripMenuItem";
+            this.поделитьсяToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
+            this.поделитьсяToolStripMenuItem.Text = "Поделиться";
+            this.поделитьсяToolStripMenuItem.Click += new System.EventHandler(this.поделитьсяToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -286,5 +295,6 @@
         private ToolStripMenuItem выбратьПапкуToolStripMenuItem;
         private FolderBrowserDialog folderBrowserDialog;
         private ToolStripProgressBar downloadingStripProgressBar;
+        private ToolStripMenuItem поделитьсяToolStripMenuItem;
     }
 }

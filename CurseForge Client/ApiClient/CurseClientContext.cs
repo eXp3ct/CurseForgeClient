@@ -58,6 +58,7 @@ namespace CurseForgeClient.ApiClient
                 { "sortField", sortField.ToString() },
                 { "sortOrder", sortOrder },
                 { "pageSize", pageSize.ToString() },
+                { "modLoaderType", ((int)ModLoaderType.Forge).ToString() },
             };
             var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
             //var queryString = $"gameId={432}&classId={6}&index={0}&pageSize={500}";

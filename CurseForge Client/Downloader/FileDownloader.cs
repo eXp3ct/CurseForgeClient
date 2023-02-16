@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CurseForgeClient.Downloader
 {
-    public abstract class FileDownloader
+    public class FileDownloader
     {
-        public abstract string DirectoryPath { get; set; }
+        public virtual string DirectoryPath { get; set; }
         public async Task Download(string url, string fileName, IProgress<double> progress)
         {
             using var client = new HttpClient();
