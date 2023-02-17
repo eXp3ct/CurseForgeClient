@@ -31,10 +31,10 @@ namespace CurseForgeClient.ApiClient
             string slug = "",
             int index = 0,
             SortField sortField = SortField.Name,
-            string sortOrder = "asc", int pageSize = 10)
+            string sortOrder = "asc", int pageSize = 10, int? categoryId = null)
         {
             var jsonString = await _client.SearchModAsync(gameVersion: gameVersion, slug: slug,
-                index: index, sortField: sortField, sortOrder: sortOrder, pageSize: pageSize);
+                index: index, sortField: sortField, sortOrder: sortOrder, pageSize: pageSize, categoryId: categoryId);
             var mods = JsonConvert.DeserializeObject<ModsData>(jsonString);
             var modsList = new List<Mod>(mods.Data.Count);
 
@@ -65,6 +65,18 @@ namespace CurseForgeClient.ApiClient
 
             return filesList;
 
+        }
+        public async Task<List<Category>> GetCategories()
+        {
+            var jsonString = await _client.GetCategories();
+
+            var categories = JsonConvert.DeserializeObject<Categories>(jsonString);
+            var categoriesList = new List<Category>(categories.Data.Count);
+
+            foreach(var category in categories.Data)
+                categoriesList.Add(category);
+
+            return categoriesList;
         }
     }
     

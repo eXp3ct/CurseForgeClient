@@ -17,7 +17,8 @@ namespace CurseForgeClient.ApiClient
             int index = 0,
             SortField sortField = SortField.Name,
             string sortOrder = "asc",
-            int pageSize = 10);
+            int pageSize = 10,
+            int? categoryId = null);
         public Task<string> GetModFileAsync(int modId, int fileId);
         public static bool ConnectionStatus(HttpResponseMessage response) => response.IsSuccessStatusCode;
         public static async Task ResponseToJson(HttpResponseMessage response, bool search = false, bool getFile = false)
@@ -38,6 +39,7 @@ namespace CurseForgeClient.ApiClient
         public Task<string> GetModFiles(int modId, string gameVersion = "", ModLoaderType modLoaderType = ModLoaderType.Forge, int index = 0,
             int pageSize = 50);
         public Task<byte[]> FetchImage(string url);
+        public Task<string> GetCategories();
 
     }
 }

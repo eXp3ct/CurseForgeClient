@@ -24,6 +24,7 @@ namespace CurseForgeClient
             { "По возрастанию", "asc" },
             { "По убыванию", "desc" },
         };
+        private readonly Dictionary<string, int> _categories = new();
         private int PageHaveSeen { get; set; } = 0;
         private string DirectoryPath = string.Empty;
         private const int PageSize = 28;
@@ -31,6 +32,8 @@ namespace CurseForgeClient
         private SortField SortFieldName = SortField.Name;
         private int _page = 0;
         private string GameVersion = string.Empty;
+        private int CategoryId { get; set; }
+        private string CurrentSlug { get; set; }
         private static ModController _controller;
         private static List<Mod> _currentMods;
         public MainForm()
@@ -45,7 +48,20 @@ namespace CurseForgeClient
                 sortFieldStripComboBox.Items.Add(sortField.ToString());
             foreach(var sortOrder in _sortOrder.Keys)
                 sortOrderStripComboBox.Items.Add(sortOrder.ToString());
-            await Init();        
+
+            await Init();
+
+            var categories = await _controller.GetCategories();
+
+            for (int i = 0; i < categories.Count; i++)
+            {
+                _categories.Add(categories[i].Name, categories[i].Id);
+            }
+            foreach(var category in _categories.Keys)
+            {
+                categoriesStripComboBox.Items.Add(category);
+            }
+            //toolStrip1.Invalidate();
         }
         private async Task Init()
         {
@@ -90,10 +106,10 @@ namespace CurseForgeClient
         private async Task<List<Mod>> GetModsFromCacheOrFetch(string slug = "",
             SortField sortField = SortField.Name,
             string sortOrder = "asc",
-            string gameVersion = "")
+            string gameVersion = "", int? categoryId = null)
         {
             // Create a cache key based on the current game version, page number, slug, sort field, and sort order
-            string cacheKey = "ModsPage_" + gameVersion + "" + slug + "" + sortField + "" + sortOrder + "" + _page;
+            string cacheKey = "ModsPage_" + gameVersion + "" + slug + "" + sortField + "" + sortOrder + "" + categoryId + "" + _page;
             string selectedModsCacheKey = "SelectedMods_" + GameVersion + "_" + _page;
 
             // Check if there's a cache entry for the current game version and page
@@ -118,7 +134,7 @@ namespace CurseForgeClient
 
             // If there's no cache entry for the current game version and page, fetch the data
             mods = await _controller.GetMods(gameVersion: gameVersion, slug: slug,
-                        sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize);
+                        sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize, categoryId: categoryId);
 
             // Add the fetched data to the cache with a 1 hour expiration time
             _cache.Add(cacheKey, mods, DateTime.Now.AddHours(1));
@@ -181,7 +197,6 @@ namespace CurseForgeClient
         }
         private void _dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-
             // Get the row index of the selected row
             int rowIndex = e.RowIndex;
 
@@ -232,14 +247,15 @@ namespace CurseForgeClient
         private async Task SetTable(
             string slug = "",
             SortField sortField = SortField.Name,
-            string sortOrder = "asc")
+            string sortOrder = "asc",
+            int? categoryId = null)
         {
 
             //_currentMods = await _controller.GetMods(gameVersion: GameVersion, slug: slug,
             //        sortField: sortField, sortOrder: sortOrder, index: _page * PageSize, pageSize: PageSize);
 
-            _currentMods = await GetModsFromCacheOrFetch(slug: slug,
-                    sortField: SortFieldName, sortOrder: SortOrder, gameVersion: GameVersion);
+            _currentMods = await GetModsFromCacheOrFetch(slug: CurrentSlug,
+                    sortField: SortFieldName, sortOrder: SortOrder, gameVersion: GameVersion, categoryId: CategoryId);
 
             _bindingSource.DataSource = _currentMods;
             _bindingSource.ResetBindings(false);
@@ -376,6 +392,22 @@ namespace CurseForgeClient
             shareWindow.Show(this);
 
 
+        }
+
+        private async void categoriesStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var category = categoriesStripComboBox.SelectedItem as string;
+            CategoryId = _categories[category];
+            await SetTable();
+        }
+
+        private async void searchBarStripTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == Convert.ToChar(Keys.Enter))
+            {
+                CurrentSlug = searchBarStripTextBox.Text;
+                await SetTable();
+            }
         }
     }
 }

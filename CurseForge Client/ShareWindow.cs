@@ -12,7 +12,6 @@ namespace CurseForgeClient
         {
             InitializeComponent();
             DirectoryPath = directoryPath;
-            this.HostServer = new Server.Program("26.101.220.140");
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -20,21 +19,20 @@ namespace CurseForgeClient
             var zipPath = Compressor.StartCompress(DirectoryPath);
             try
             {
-                if(ipInput.Text == null)
+                if(string.IsNullOrEmpty(ipInput.Text))
                 {
                     throw new ArgumentNullException(nameof(ipInput));
                 }
-                HostServer.Ip = ipInput.Text;
+                HostServer = new Server.Program(ipInput.Text);
                 Server.Program.FilePath = zipPath;
                 await HostServer.RunServer();
+                serverStatus.Text = "Сервер работает";
+                MessageBox.Show($"Сервер успешно запущен на IP: {HostServer.Ip}", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                serverStatus.Text = "Сервер работает";
+                serverStatus.Text = "Сервер не работает";
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -42,11 +40,13 @@ namespace CurseForgeClient
         {
             try
             {
+                if (HostServer == null)
+                    return;
                 await HostServer.StopServer();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.ToString());
             }
             finally
             {
@@ -65,6 +65,7 @@ namespace CurseForgeClient
                     folder = folderInfo.SelectedPath;
                 }
                 await ApiDownloader.Download($"http://{ipInput.Text}:5051/mods", folder, progressBar);
+                MessageBox.Show($"Моды успешно получены", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

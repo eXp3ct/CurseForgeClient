@@ -35,6 +35,7 @@
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выбратьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.поделитьсяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.backStripButton = new System.Windows.Forms.ToolStripButton();
             this._pageStripLabel = new System.Windows.Forms.ToolStripLabel();
@@ -49,10 +50,14 @@
             this.sortOrderTextStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.sortOrderStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.downloadingStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.categoryStripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.categoriesStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.installModsButton = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.поделитьсяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.searchBarStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).BeginInit();
             this._menuStrip.SuspendLayout();
@@ -109,6 +114,13 @@
             this.выбратьПапкуToolStripMenuItem.Text = "Выбрать папку";
             this.выбратьПапкуToolStripMenuItem.Click += new System.EventHandler(this.выбратьПапкуToolStripMenuItem_Click);
             // 
+            // поделитьсяToolStripMenuItem
+            // 
+            this.поделитьсяToolStripMenuItem.Name = "поделитьсяToolStripMenuItem";
+            this.поделитьсяToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
+            this.поделитьсяToolStripMenuItem.Text = "Поделиться";
+            this.поделитьсяToolStripMenuItem.Click += new System.EventHandler(this.поделитьсяToolStripMenuItem_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -125,7 +137,12 @@
             this.toolStripSeparator3,
             this.sortOrderTextStripLabel,
             this.sortOrderStripComboBox,
-            this.downloadingStripProgressBar});
+            this.downloadingStripProgressBar,
+            this.toolStripSeparator4,
+            this.categoryStripLabel,
+            this.categoriesStripComboBox,
+            this.toolStripSeparator5,
+            this.searchBarStripTextBox});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1201, 25);
@@ -167,8 +184,8 @@
             // gameVersionTextStripLabel
             // 
             this.gameVersionTextStripLabel.Name = "gameVersionTextStripLabel";
-            this.gameVersionTextStripLabel.Size = new System.Drawing.Size(77, 22);
-            this.gameVersionTextStripLabel.Text = "Версия игры";
+            this.gameVersionTextStripLabel.Size = new System.Drawing.Size(46, 22);
+            this.gameVersionTextStripLabel.Text = "Версия";
             // 
             // gameVersionStripComboBox
             // 
@@ -185,8 +202,8 @@
             // sortFieldStripLabel
             // 
             this.sortFieldStripLabel.Name = "sortFieldStripLabel";
-            this.sortFieldStripLabel.Size = new System.Drawing.Size(95, 22);
-            this.sortFieldStripLabel.Text = "Сортировать по";
+            this.sortFieldStripLabel.Size = new System.Drawing.Size(78, 22);
+            this.sortFieldStripLabel.Text = "Сортировать";
             // 
             // sortFieldStripComboBox
             // 
@@ -203,8 +220,8 @@
             // sortOrderTextStripLabel
             // 
             this.sortOrderTextStripLabel.Name = "sortOrderTextStripLabel";
-            this.sortOrderTextStripLabel.Size = new System.Drawing.Size(149, 22);
-            this.sortOrderTextStripLabel.Text = "Направление сортировки";
+            this.sortOrderTextStripLabel.Size = new System.Drawing.Size(81, 22);
+            this.sortOrderTextStripLabel.Text = "Направление";
             // 
             // sortOrderStripComboBox
             // 
@@ -215,8 +232,27 @@
             // downloadingStripProgressBar
             // 
             this.downloadingStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.downloadingStripProgressBar.Margin = new System.Windows.Forms.Padding(1, 2, 13, 1);
             this.downloadingStripProgressBar.Name = "downloadingStripProgressBar";
-            this.downloadingStripProgressBar.Size = new System.Drawing.Size(200, 22);
+            this.downloadingStripProgressBar.Size = new System.Drawing.Size(100, 22);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // categoryStripLabel
+            // 
+            this.categoryStripLabel.Name = "categoryStripLabel";
+            this.categoryStripLabel.Size = new System.Drawing.Size(63, 22);
+            this.categoryStripLabel.Text = "Категория";
+            // 
+            // categoriesStripComboBox
+            // 
+            this.categoriesStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.categoriesStripComboBox.Name = "categoriesStripComboBox";
+            this.categoriesStripComboBox.Size = new System.Drawing.Size(121, 25);
+            this.categoriesStripComboBox.SelectedIndexChanged += new System.EventHandler(this.categoriesStripComboBox_SelectedIndexChanged);
             // 
             // flowLayoutPanel1
             // 
@@ -239,12 +275,17 @@
             this.installModsButton.UseVisualStyleBackColor = true;
             this.installModsButton.Click += new System.EventHandler(this.installModsButton_Click);
             // 
-            // поделитьсяToolStripMenuItem
+            // toolStripSeparator5
             // 
-            this.поделитьсяToolStripMenuItem.Name = "поделитьсяToolStripMenuItem";
-            this.поделитьсяToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
-            this.поделитьсяToolStripMenuItem.Text = "Поделиться";
-            this.поделитьсяToolStripMenuItem.Click += new System.EventHandler(this.поделитьсяToolStripMenuItem_Click);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // searchBarStripTextBox
+            // 
+            this.searchBarStripTextBox.Name = "searchBarStripTextBox";
+            this.searchBarStripTextBox.Size = new System.Drawing.Size(100, 25);
+            this.searchBarStripTextBox.Text = "Название...";
+            this.searchBarStripTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchBarStripTextBox_KeyPress);
             // 
             // MainForm
             // 
@@ -296,5 +337,10 @@
         private FolderBrowserDialog folderBrowserDialog;
         private ToolStripProgressBar downloadingStripProgressBar;
         private ToolStripMenuItem поделитьсяToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripLabel categoryStripLabel;
+        private ToolStripComboBox categoriesStripComboBox;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripTextBox searchBarStripTextBox;
     }
 }

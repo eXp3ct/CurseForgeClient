@@ -8,14 +8,6 @@ namespace Server
         public Program(string ip)
         {
             Ip = ip;
-
-            _host = Host.CreateDefaultBuilder()
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseUrls($"http://{Ip}:5051");
-                webBuilder.UseStartup<Startup>();
-            })
-            .Build();
         }
         public static void Main(string[] args)
         {
@@ -23,6 +15,13 @@ namespace Server
         }
         public async Task RunServer()
         {
+            _host = Host.CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseUrls($"http://{Ip}:5051");
+                webBuilder.UseStartup<Startup>();
+            })
+            .Build();
             await _host.StartAsync();
         }
         public async Task StopServer()

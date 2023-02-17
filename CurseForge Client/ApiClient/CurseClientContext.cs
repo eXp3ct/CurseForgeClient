@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 using System;
+using System.Reflection;
 
 namespace CurseForgeClient.ApiClient
 {
@@ -39,7 +40,8 @@ namespace CurseForgeClient.ApiClient
             int index = 0,
             SortField sortField = SortField.Name,
             string sortOrder = "asc",
-            int pageSize = 10)
+            int pageSize = 10,
+            int? categoryId = null)
         {
             using var client = new HttpClient();
             client.AddHeaders(Headers);
@@ -59,6 +61,7 @@ namespace CurseForgeClient.ApiClient
                 { "sortOrder", sortOrder },
                 { "pageSize", pageSize.ToString() },
                 { "modLoaderType", ((int)ModLoaderType.Forge).ToString() },
+                { "categoryId", categoryId.ToString() },
             };
             var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
             //var queryString = $"gameId={432}&classId={6}&index={0}&pageSize={500}";
@@ -116,6 +119,29 @@ namespace CurseForgeClient.ApiClient
                 { "modLoaderType", ((int)modLoaderType).ToString()},
                 { "index", index.ToString()},
                 { "pageSize", pageSize.ToString()},
+            };
+            var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+            //var queryString = $"gameId={432}&classId={6}&index={0}&pageSize={500}";
+            request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
+
+            var response = await client.SendAsync(request);
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        public async Task<string> GetCategories()
+        {
+            using var client = new HttpClient();
+            client.AddHeaders(Headers);
+
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"{BaseUrl}/v1/categories");
+            foreach (var header in Headers)
+                request.Headers.Add(header.Key, header.Value);
+
+            var queryParams = new Dictionary<string, string>
+            {
+                { "gameId", "432"},
+                { "classId", "6"},
             };
             var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
             //var queryString = $"gameId={432}&classId={6}&index={0}&pageSize={500}";
