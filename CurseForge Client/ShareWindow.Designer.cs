@@ -63,6 +63,7 @@
             this.ipInput.Name = "ipInput";
             this.ipInput.Size = new System.Drawing.Size(217, 23);
             this.ipInput.TabIndex = 3;
+            this.ipInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // downloadFromServer
             // 

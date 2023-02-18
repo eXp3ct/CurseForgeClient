@@ -8,7 +8,7 @@ namespace CurseForgeClient.Downloader
 {
     public class ApiDownloader
     {
-        public static async Task Download(string url, string destPath, ProgressBar progressBar)
+        public static async Task<string> Download(string url, string destPath, ProgressBar progressBar)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
@@ -19,7 +19,8 @@ namespace CurseForgeClient.Downloader
             var buffer = new byte[8192];
             var totalBytesRead = 0;
             using var contentStream = await response.Content.ReadAsStreamAsync();
-            using var fileStream = new FileStream(Path.Combine(destPath, "mods.zip"), FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true);
+            var zipPath = Path.Combine(destPath, "mods.zip");
+            using var fileStream = new FileStream(zipPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true);
             while (true)
             {
                 var bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length);
@@ -32,6 +33,7 @@ namespace CurseForgeClient.Downloader
                 var progressPercentage = (double)totalBytesRead / fileSize * 100;
                 progressBar.Value = (int)progressPercentage;
             }
+            return zipPath;
         }
     }
 }

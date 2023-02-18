@@ -30,6 +30,7 @@ namespace CurseForgeClient
         private const int PageSize = 28;
         private string SortOrder = "asc";
         private SortField SortFieldName = SortField.Name;
+        private bool IsFetchingImages = false;
         private int _page = 0;
         private string GameVersion = string.Empty;
         private int CategoryId { get; set; }
@@ -102,6 +103,7 @@ namespace CurseForgeClient
 
 
             FetchImages();
+            IsFetchingImages = false;
         }
         private async Task<List<Mod>> GetModsFromCacheOrFetch(string slug = "",
             SortField sortField = SortField.Name,
@@ -264,6 +266,7 @@ namespace CurseForgeClient
             RestoreSelectionState();
 
             FetchImages();
+            IsFetchingImages = false;
         }
 
         private async void sortFieldStripComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -405,6 +408,8 @@ namespace CurseForgeClient
         {
             if (e.KeyChar == Convert.ToChar(Keys.Enter))
             {
+                if (IsFetchingImages)
+                    return;
                 CurrentSlug = searchBarStripTextBox.Text;
                 await SetTable();
             }

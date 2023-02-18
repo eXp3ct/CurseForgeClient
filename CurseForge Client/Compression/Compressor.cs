@@ -28,5 +28,12 @@ namespace CurseForgeClient.Compression
             MessageBox.Show("Mods are successfuly compressed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return zipPath;
         }
+        public static void Decompress(string zipPath)
+        {
+            string modsDirectory = Path.Combine(Directory.GetParent(zipPath).FullName, "mods");
+            ZipFile.ExtractToDirectory(zipPath, modsDirectory);
+            File.Delete(zipPath);
+        }
+
     }
 }

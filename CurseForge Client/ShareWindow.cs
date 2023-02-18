@@ -64,7 +64,8 @@ namespace CurseForgeClient
                 {
                     folder = folderInfo.SelectedPath;
                 }
-                await ApiDownloader.Download($"http://{ipInput.Text}:5051/mods", folder, progressBar);
+                var zipPath = await ApiDownloader.Download($"http://{ipInput.Text}:5051/mods", folder, progressBar);
+                Compressor.Decompress(zipPath);
                 MessageBox.Show($"Моды успешно получены", "Успешно", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -76,5 +77,6 @@ namespace CurseForgeClient
                 progressBar.Value = 0;
             }
         }
+
     }
 }
