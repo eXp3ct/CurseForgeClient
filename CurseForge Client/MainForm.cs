@@ -4,6 +4,9 @@ using CurseForgeClient.Extensions;
 using System.Runtime.Caching;
 using CurseForgeClient.Downloader;
 using CurseForgeClient.CustomControl;
+using Newtonsoft.Json;
+using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace CurseForgeClient
 {
@@ -301,19 +304,7 @@ namespace CurseForgeClient
                     throw new InvalidDataException("Choose directory path");
 
                 var downloader = new ModDownloader(DirectoryPath);
-                List<Mod> mods = new();
-
-                for (int i = 0; i <= PageHaveSeen; i++)
-                {
-                    string cacheKey = "SelectedMods_" + GameVersion + "_" + i;
-                    if (_cache.Contains(cacheKey))
-                    {
-                        var selectedMods = (_cache[cacheKey] as Dictionary<int, Mod>).Values.ToList();
-                        mods.AddRange(selectedMods);
-                    }
-                }
-
-
+                List<Mod> mods = GetSelectedMods();
 
                 if (mods == null)
                     throw new NullReferenceException("Error occured while downloading mods");
@@ -340,6 +331,21 @@ namespace CurseForgeClient
             {
                 MessageBox.Show($"Error occured while downloading mods {ex.Message} \n{ex.StackTrace}");
             }
+        }
+
+        private List<Mod> GetSelectedMods()
+        {
+            var mods = new List<Mod>();
+            for (int i = 0; i <= PageHaveSeen; i++)
+            {
+                string cacheKey = "SelectedMods_" + GameVersion + "_" + i;
+                if (_cache.Contains(cacheKey))
+                {
+                    var selectedMods = (_cache[cacheKey] as Dictionary<int, Mod>).Values.ToList();
+                    mods.AddRange(selectedMods);
+                }
+            }
+            return mods;
         }
 
         private void _dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -413,6 +419,80 @@ namespace CurseForgeClient
                 CurrentSlug = searchBarStripTextBox.Text;
                 await SetTable();
             }
+        }
+
+        private void dragArea_DragDrop(object sender, DragEventArgs e)
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            if (!ValidateFiles(files))
+            {
+                MessageBox.Show("Выберетие файлы с расширением .jar", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                foreach(var file in files)
+                {
+                    File.Move(file, $"{DirectoryPath}/{Path.GetFileName(file)}");
+                }
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Выберите путь до папки", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dragArea_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+        private bool ValidateFiles(string[] files)
+        {
+            foreach(var file in files)
+            {
+                if(Path.GetExtension(file) != ".jar")
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var selectedMods = GetSelectedMods();
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "*|.json";
+            var filePath = string.Empty;
+            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePath = saveFileDialog.FileName;
+            }
+            if (selectedMods == null)
+                throw new NullReferenceException("Ошибка при получении выбранных модов");
+
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(selectedMods, Formatting.Indented));
+        }
+
+        private async void загрузитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var path = string.Empty;
+            var pathFinder = new OpenFileDialog();
+            if (pathFinder.ShowDialog() == DialogResult.OK)
+            {
+                path = pathFinder.FileName;
+            }
+            var json = File.ReadAllText(path);
+
+            var selectedMods = JsonConvert.DeserializeObject<List<Mod>>(json);
+
+            _currentMods = selectedMods;
+            _bindingSource.DataSource = _currentMods;
+            _dataGridView.DataSource = _bindingSource;
+            FetchImages();
         }
     }
 }

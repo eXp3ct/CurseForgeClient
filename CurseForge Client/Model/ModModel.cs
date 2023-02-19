@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.ComponentModel;
 
 namespace CurseForgeClient.Model;
@@ -6,6 +7,7 @@ public class Mod
 {
     public int Id { get; set; }
     public ModLogo? Logo { get; set; }
+    [JsonIgnore]
     public Image? ModLogo { get; set; } = null;
     public string Name { get; set; }
     public string Slug { get; set; }

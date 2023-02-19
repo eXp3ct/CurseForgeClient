@@ -1,0 +1,29 @@
+[
+  {
+    "Id": 314924,
+    "Logo": {
+      "Url": "https://media.forgecdn.net/avatars/286/830/637305997654813298.png"
+    },
+    "Name": " 101 Dimensions",
+    "Slug": "hundred-one-dimensions",
+    "Summary": "A mod that adds tons of new dimensions!"
+  },
+  {
+    "Id": 313006,
+    "Logo": {
+      "Url": "https://media.forgecdn.net/avatars/189/99/636848435169560731.png"
+    },
+    "Name": " A Peculiar Fantasy",
+    "Slug": "a-peculiar-fantasy-mod",
+    "Summary": "A mod adding new ores, blocks, items, baubles, etc..."
+  },
+  {
+    "Id": 564172,
+    "Logo": {
+      "Url": "https://media.forgecdn.net/avatars/475/954/637768521080118106.png"
+    },
+    "Name": " Amethyst Mod Own",
+    "Slug": "amethyst-mod-own",
+    "Summary": "Adds Tools and Armor to the game!"
+  }
+]

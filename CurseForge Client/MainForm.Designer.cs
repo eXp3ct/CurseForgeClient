@@ -35,6 +35,8 @@
             this._menuStrip = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выбратьПапкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загрузитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.поделитьсяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.backStripButton = new System.Windows.Forms.ToolStripButton();
@@ -53,11 +55,12 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.categoryStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.categoriesStripComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.installModsButton = new System.Windows.Forms.Button();
-            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.searchBarStripTextBox = new System.Windows.Forms.ToolStripTextBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.installModsButton = new System.Windows.Forms.Button();
+            this.dragArea = new System.Windows.Forms.Label();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this._dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._bindingSource)).BeginInit();
             this._menuStrip.SuspendLayout();
@@ -102,7 +105,9 @@
             // файлToolStripMenuItem
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.выбратьПапкуToolStripMenuItem});
+            this.выбратьПапкуToolStripMenuItem,
+            this.сохранитьToolStripMenuItem,
+            this.загрузитьToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
@@ -113,6 +118,20 @@
             this.выбратьПапкуToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.выбратьПапкуToolStripMenuItem.Text = "Выбрать папку";
             this.выбратьПапкуToolStripMenuItem.Click += new System.EventHandler(this.выбратьПапкуToolStripMenuItem_Click);
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.сохранитьToolStripMenuItem.Text = "Сохранить";
+            this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
+            // 
+            // загрузитьToolStripMenuItem
+            // 
+            this.загрузитьToolStripMenuItem.Name = "загрузитьToolStripMenuItem";
+            this.загрузитьToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.загрузитьToolStripMenuItem.Text = "Загрузить";
+            this.загрузитьToolStripMenuItem.Click += new System.EventHandler(this.загрузитьToolStripMenuItem_Click);
             // 
             // поделитьсяToolStripMenuItem
             // 
@@ -254,10 +273,23 @@
             this.categoriesStripComboBox.Size = new System.Drawing.Size(121, 25);
             this.categoriesStripComboBox.SelectedIndexChanged += new System.EventHandler(this.categoriesStripComboBox_SelectedIndexChanged);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            // 
+            // searchBarStripTextBox
+            // 
+            this.searchBarStripTextBox.Name = "searchBarStripTextBox";
+            this.searchBarStripTextBox.Size = new System.Drawing.Size(100, 25);
+            this.searchBarStripTextBox.Text = "Название...";
+            this.searchBarStripTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchBarStripTextBox_KeyPress);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.flowLayoutPanel1.Controls.Add(this.installModsButton);
+            this.flowLayoutPanel1.Controls.Add(this.dragArea);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(987, 52);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -275,17 +307,17 @@
             this.installModsButton.UseVisualStyleBackColor = true;
             this.installModsButton.Click += new System.EventHandler(this.installModsButton_Click);
             // 
-            // toolStripSeparator5
+            // dragArea
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
-            // 
-            // searchBarStripTextBox
-            // 
-            this.searchBarStripTextBox.Name = "searchBarStripTextBox";
-            this.searchBarStripTextBox.Size = new System.Drawing.Size(100, 25);
-            this.searchBarStripTextBox.Text = "Название...";
-            this.searchBarStripTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchBarStripTextBox_KeyPress);
+            this.dragArea.AllowDrop = true;
+            this.dragArea.Location = new System.Drawing.Point(3, 82);
+            this.dragArea.Name = "dragArea";
+            this.dragArea.Size = new System.Drawing.Size(197, 112);
+            this.dragArea.TabIndex = 1;
+            this.dragArea.Text = "Перетащите мод для установки";
+            this.dragArea.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.dragArea.DragDrop += new System.Windows.Forms.DragEventHandler(this.dragArea_DragDrop);
+            this.dragArea.DragEnter += new System.Windows.Forms.DragEventHandler(this.dragArea_DragEnter);
             // 
             // MainForm
             // 
@@ -296,6 +328,7 @@
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this._dataGridView);
             this.Controls.Add(this._menuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this._menuStrip;
             this.Name = "MainForm";
             this.Text = "Minecraft ModLoader";
@@ -342,5 +375,8 @@
         private ToolStripComboBox categoriesStripComboBox;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripTextBox searchBarStripTextBox;
+        private Label dragArea;
+        private ToolStripMenuItem сохранитьToolStripMenuItem;
+        private ToolStripMenuItem загрузитьToolStripMenuItem;
     }
 }
